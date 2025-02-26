@@ -144,7 +144,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
+myenv/
 # Pyre type checker
 .pyre/
 
@@ -163,5 +163,5 @@ cython_debug/
 
 # Macos
 .DS_Store
-
+.idea
 .ruff_cache
