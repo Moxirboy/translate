@@ -12,7 +12,7 @@ from ..core.utils.rate_limit import rate_limiter
 from ..crud.crud_rate_limit import crud_rate_limits
 from ..crud.crud_tier import crud_tiers
 from ..crud.crud_users import crud_users
-from ..models.user import User
+from ..models.user import Users
 from ..schemas.rate_limit import sanitize_path
 
 logger = logging.getLogger(__name__)
@@ -73,7 +73,7 @@ async def get_current_superuser(current_user: Annotated[dict, Depends(get_curren
 
 
 async def rate_limiter_dependency(
-    request: Request, db: Annotated[AsyncSession, Depends(async_get_db)], user: User | None = Depends(get_optional_user)
+    request: Request, db: Annotated[AsyncSession, Depends(async_get_db)], user: Users | None = Depends(get_optional_user)
 ) -> None:
     if hasattr(request.app.state, "initialization_complete"):
         await request.app.state.initialization_complete.wait()

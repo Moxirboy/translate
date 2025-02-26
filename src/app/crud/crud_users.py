@@ -1,7 +1,8 @@
 from fastcrud import FastCRUD
 
-from ..models.user import User
-from ..schemas.user import UserCreateInternal, UserDelete, UserUpdate, UserUpdateInternal
+from ..models.user import Users
+from ..schemas.user import UsersCreateInternal, UsersDelete, UsersUpdate, UsersUpdateInternal
 
-CRUDUser = FastCRUD[User, UserCreateInternal, UserUpdate, UserUpdateInternal, UserDelete, None]
-crud_users = CRUDUser(User)
+
+CRUDUser = FastCRUD[Users, UsersCreateInternal, UsersUpdate, UsersUpdateInternal, UsersDelete, None]
+crud_users = CRUDUser(Users)

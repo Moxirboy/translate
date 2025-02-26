@@ -6,10 +6,10 @@ from datetime import UTC, datetime
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, MetaData, String, Table, insert, select
 from sqlalchemy.dialects.postgresql import UUID
 
-from ..app.core.config import settings
-from ..app.core.db.database import AsyncSession, async_engine, local_session
-from ..app.core.security import get_password_hash
-from ..app.models.user import User
+from src.app.core.config import settings
+from src.app.core.db.database import AsyncSession, async_engine, local_session
+from src.app.core.security import get_password_hash
+from src.app.models.user import Users
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,14 +22,14 @@ async def create_first_user(session: AsyncSession) -> None:
         username = settings.ADMIN_USERNAME
         hashed_password = get_password_hash(settings.ADMIN_PASSWORD)
 
-        query = select(User).filter_by(email=email)
+        query = select(Users).filter_by(email=email)
         result = await session.execute(query)
         user = result.scalar_one_or_none()
 
         if user is None:
             metadata = MetaData()
             user_table = Table(
-                "user",
+                "users",
                 metadata,
                 Column("id", Integer, primary_key=True, autoincrement=True, nullable=False),
                 Column("name", String(30), nullable=False),
@@ -70,6 +70,7 @@ async def create_first_user(session: AsyncSession) -> None:
 
 async def main():
     async with local_session() as session:
+        print("created")
         await create_first_user(session)
 
 

@@ -11,7 +11,7 @@ from ...core.utils.cache import cache
 from ...crud.crud_posts import crud_posts
 from ...crud.crud_users import crud_users
 from ...schemas.post import PostCreate, PostCreateInternal, PostRead, PostUpdate
-from ...schemas.user import UserRead
+from ...schemas.user import UsersRead
 
 router = APIRouter(tags=["posts"])
 
@@ -21,10 +21,10 @@ async def write_post(
     request: Request,
     username: str,
     post: PostCreate,
-    current_user: Annotated[UserRead, Depends(get_current_user)],
+    current_user: Annotated[UsersRead, Depends(get_current_user)],
     db: Annotated[AsyncSession, Depends(async_get_db)],
 ) -> PostRead:
-    db_user = await crud_users.get(db=db, schema_to_select=UserRead, username=username, is_deleted=False)
+    db_user = await crud_users.get(db=db, schema_to_select=UsersRead, username=username, is_deleted=False)
     if db_user is None:
         raise NotFoundException("User not found")
 
@@ -52,7 +52,7 @@ async def read_posts(
     page: int = 1,
     items_per_page: int = 10,
 ) -> dict:
-    db_user = await crud_users.get(db=db, schema_to_select=UserRead, username=username, is_deleted=False)
+    db_user = await crud_users.get(db=db, schema_to_select=UsersRead, username=username, is_deleted=False)
     if not db_user:
         raise NotFoundException("User not found")
 
@@ -74,7 +74,7 @@ async def read_posts(
 async def read_post(
     request: Request, username: str, id: int, db: Annotated[AsyncSession, Depends(async_get_db)]
 ) -> dict:
-    db_user = await crud_users.get(db=db, schema_to_select=UserRead, username=username, is_deleted=False)
+    db_user = await crud_users.get(db=db, schema_to_select=UsersRead, username=username, is_deleted=False)
     if db_user is None:
         raise NotFoundException("User not found")
 
@@ -94,10 +94,10 @@ async def patch_post(
     username: str,
     id: int,
     values: PostUpdate,
-    current_user: Annotated[UserRead, Depends(get_current_user)],
+    current_user: Annotated[UsersRead, Depends(get_current_user)],
     db: Annotated[AsyncSession, Depends(async_get_db)],
 ) -> dict[str, str]:
-    db_user = await crud_users.get(db=db, schema_to_select=UserRead, username=username, is_deleted=False)
+    db_user = await crud_users.get(db=db, schema_to_select=UsersRead, username=username, is_deleted=False)
     if db_user is None:
         raise NotFoundException("User not found")
 
@@ -118,10 +118,10 @@ async def erase_post(
     request: Request,
     username: str,
     id: int,
-    current_user: Annotated[UserRead, Depends(get_current_user)],
+    current_user: Annotated[UsersRead, Depends(get_current_user)],
     db: Annotated[AsyncSession, Depends(async_get_db)],
 ) -> dict[str, str]:
-    db_user = await crud_users.get(db=db, schema_to_select=UserRead, username=username, is_deleted=False)
+    db_user = await crud_users.get(db=db, schema_to_select=UsersRead, username=username, is_deleted=False)
     if db_user is None:
         raise NotFoundException("User not found")
 
@@ -142,7 +142,7 @@ async def erase_post(
 async def erase_db_post(
     request: Request, username: str, id: int, db: Annotated[AsyncSession, Depends(async_get_db)]
 ) -> dict[str, str]:
-    db_user = await crud_users.get(db=db, schema_to_select=UserRead, username=username, is_deleted=False)
+    db_user = await crud_users.get(db=db, schema_to_select=UsersRead, username=username, is_deleted=False)
     if db_user is None:
         raise NotFoundException("User not found")
 
