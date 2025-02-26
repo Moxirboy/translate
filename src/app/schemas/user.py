@@ -6,20 +6,20 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from ..core.schemas import PersistentDeletion, TimestampSchema, UUIDSchema
 
 
-class UserBase(BaseModel):
+class UsersBase(BaseModel):
     name: Annotated[str, Field(min_length=2, max_length=30, examples=["User Userson"])]
     username: Annotated[str, Field(min_length=2, max_length=20, pattern=r"^[a-z0-9]+$", examples=["userson"])]
     email: Annotated[EmailStr, Field(examples=["user.userson@example.com"])]
 
 
-class User(TimestampSchema, UserBase, UUIDSchema, PersistentDeletion):
+class Users(TimestampSchema, UsersBase, UUIDSchema, PersistentDeletion):
     profile_image_url: Annotated[str, Field(default="https://www.profileimageurl.com")]
     hashed_password: str
     is_superuser: bool = False
     tier_id: int | None = None
 
 
-class UserRead(BaseModel):
+class UsersRead(BaseModel):
     id: int
 
     name: Annotated[str, Field(min_length=2, max_length=30, examples=["User Userson"])]
@@ -29,17 +29,17 @@ class UserRead(BaseModel):
     tier_id: int | None
 
 
-class UserCreate(UserBase):
+class UsersCreate(UsersBase):
     model_config = ConfigDict(extra="forbid")
 
     password: Annotated[str, Field(pattern=r"^.{8,}|[0-9]+|[A-Z]+|[a-z]+|[^a-zA-Z0-9]+$", examples=["Str1ngst!"])]
 
 
-class UserCreateInternal(UserBase):
+class UsersCreateInternal(UsersBase):
     hashed_password: str
 
 
-class UserUpdate(BaseModel):
+class UsersUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: Annotated[str | None, Field(min_length=2, max_length=30, examples=["User Userberg"], default=None)]
@@ -55,20 +55,20 @@ class UserUpdate(BaseModel):
     ]
 
 
-class UserUpdateInternal(UserUpdate):
+class UsersUpdateInternal(UsersUpdate):
     updated_at: datetime
 
 
-class UserTierUpdate(BaseModel):
+class UsersTierUpdate(BaseModel):
     tier_id: int
 
 
-class UserDelete(BaseModel):
+class UsersDelete(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     is_deleted: bool
     deleted_at: datetime
 
 
-class UserRestoreDeleted(BaseModel):
+class UsersRestoreDeleted(BaseModel):
     is_deleted: bool

@@ -7,11 +7,12 @@ from sqlalchemy.orm import Mapped, mapped_column
 from ..core.db.database import Base
 
 
-class User(Base):
-    __tablename__ = "user"
+class Users(Base):
+    __tablename__ = "users"
 
     id: Mapped[int] = mapped_column("id", autoincrement=True, nullable=False, unique=True, primary_key=True, init=False)
 
+    # User information
     name: Mapped[str] = mapped_column(String(30))
     username: Mapped[str] = mapped_column(String(20), unique=True, index=True)
     email: Mapped[str] = mapped_column(String(50), unique=True, index=True)
